@@ -1,5 +1,9 @@
 node_modules/
 dist/
+dist-server/
+dist-electron/
+release/
+build/
 data/
 logs/
 .env

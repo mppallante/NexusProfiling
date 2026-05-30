@@ -33,7 +33,7 @@ A ferramenta não consulta CPF, senhas, bases vazadas clandestinas, dados privad
 - Banco local: SQLite com `sql.js`.
 - Grafo: Cytoscape.js.
 - Mapa: Leaflet e OpenStreetMap.
-- Preparado para empacotamento futuro com Electron.
+- Desktop: Electron com instalador Windows via Electron Builder.
 
 ## Instalação
 
@@ -47,13 +47,50 @@ npm install
 npm run dev
 ```
 
-A interface roda em `http://127.0.0.1:5173` e a API local em `http://127.0.0.1:3333`.
+Em desenvolvimento, esse comando inicia a API local, o Vite e a janela Electron. A interface web também fica disponível em `http://127.0.0.1:5173` e a API local em `http://127.0.0.1:3333`.
 
 ## Geração de build
 
 ```bash
 npm run build
 ```
+
+Esse comando compila:
+
+- API local em `dist-server/`.
+- Processo principal Electron em `dist-electron/`.
+- Front-end em `dist/`.
+
+## Geração do executável Windows
+
+Para validar o pacote Windows descompactado:
+
+```bash
+npm run pack:win
+```
+
+Para gerar o instalador Windows:
+
+```bash
+npm run dist:win
+```
+
+O instalador será gerado em `release/NexusProfiling-Setup-0.1.0.exe`. A pasta `release/` é ignorada pelo Git.
+
+O usuário final não precisa usar terminal: após instalar, o NexusProfiling abre como aplicação desktop e inicia a API local embutida automaticamente.
+
+### SQLite no app empacotado
+
+No modo empacotado, o banco SQLite e os logs não são gravados dentro da pasta de instalação. Eles usam o diretório gravável de dados do Electron:
+
+- Banco: `%APPDATA%/NexusProfiling/data/nexus-profiling.sqlite`.
+- Logs: `%APPDATA%/NexusProfiling/logs/nexus-profiling.log`.
+
+O arquivo `sql-wasm.wasm` necessário para o SQLite é incluído como recurso extra do pacote Electron.
+
+### Conectores no app empacotado
+
+Os conectores OSINT rodam no backend Node embutido no Electron, escutando localmente em `127.0.0.1:3333`. As chamadas continuam sendo feitas diretamente para fontes públicas como BrasilAPI, ViaCEP, DNS público, Certificate Transparency e sites públicos controlados de username. O app empacotado não usa CPF, senhas, bases vazadas, login, paywall ou bypass.
 
 ## Testes
 
@@ -106,7 +143,8 @@ Observação: OpenStreetMap está implementado como camada visual de mapa, mas n
 
 - RDAP/WHOIS.
 - Have I Been Pwned com chave de API, sem senhas.
-- Empacotamento Electron.
+- Assinatura de código Windows.
+- Ícone e metadados visuais do instalador.
 - Geocodificação segura para converter endereços em coordenadas mediante política de uso compatível.
 
 ## Verificação do fluxo OSINT

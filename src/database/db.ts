@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { createRequire } from 'node:module';
 import initSqlJs, { type Database, type SqlJsStatic, type SqlValue } from 'sql.js';
 import { migrate } from './schema';
 import { createId } from '../utils/ids';
@@ -18,13 +19,16 @@ import type {
 } from '../types/domain';
 import type { ConnectorEvidence, NormalizedEntity, NormalizedRelationship } from '../types/connectors';
 
-const dataDir = path.join(process.cwd(), 'data');
+const dataDir = process.env.NEXUS_DATA_DIR ?? path.join(process.cwd(), 'data');
 fs.mkdirSync(dataDir, { recursive: true });
 const dbPath = path.join(dataDir, 'nexus-profiling.sqlite');
 
 type Row = Record<string, unknown>;
+const require = createRequire(import.meta.url);
 
-const SQL: SqlJsStatic = await initSqlJs();
+const SQL: SqlJsStatic = await initSqlJs({
+  locateFile: (file) => process.env.NEXUS_SQL_WASM_PATH ?? require.resolve(`sql.js/dist/${file}`)
+});
 const rawDb: Database = fs.existsSync(dbPath) ? new SQL.Database(fs.readFileSync(dbPath)) : new SQL.Database();
 migrate(rawDb);
 

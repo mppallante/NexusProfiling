@@ -5,7 +5,7 @@ import { InvestigationGraph } from '../components/InvestigationGraph';
 import { OsintRunner } from '../components/OsintRunner';
 import { StatCard } from '../components/StatCard';
 import { Timeline } from '../components/Timeline';
-import { apiClient } from '../services/api';
+import { apiClient, getApiUrl } from '../services/api';
 import type { CaseDetail, EntityType } from '../types/domain';
 
 interface CaseDetailPageProps {
@@ -35,7 +35,7 @@ export function CaseDetailPage({ detail, onReload, onDetailUpdated }: CaseDetail
           <h1>{detail.title}</h1>
           <p>{detail.summary}</p>
         </div>
-        <a className="button ghost" href={`/api/cases/${detail.id}/report.html`} target="_blank" rel="noreferrer">
+        <a className="button ghost" href={getApiUrl(`/api/cases/${detail.id}/report.html`)} target="_blank" rel="noreferrer">
           <Download size={18} /> Relatório HTML
         </a>
       </header>

@@ -1,7 +1,12 @@
 import type { CaseDetail, CaseRecord, OsintRunRequest, OsintRunResponse, OsintSourceRecord } from '../types/domain';
 
+export function getApiUrl(path: string): string {
+  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL ?? (import.meta.env.DEV ? '' : 'http://127.0.0.1:3333');
+  return `${apiBaseUrl}${path}`;
+}
+
 async function api<T>(url: string, init?: RequestInit): Promise<T> {
-  const response = await fetch(url, {
+  const response = await fetch(getApiUrl(url), {
     ...init,
     headers: {
       'Content-Type': 'application/json',
