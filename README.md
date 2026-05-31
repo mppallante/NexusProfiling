@@ -75,7 +75,7 @@ Para gerar o instalador Windows:
 npm run dist:win
 ```
 
-O instalador será gerado em `release/NexusProfiling-Setup-0.1.0.exe`. A pasta `release/` é ignorada pelo Git.
+O instalador será gerado em `release/NexusProfiling-Setup-<versao>.exe`. A pasta `release/` é ignorada pelo Git.
 
 O usuário final não precisa usar terminal: após instalar, o NexusProfiling abre como aplicação desktop e inicia a API local embutida automaticamente.
 
